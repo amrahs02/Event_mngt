@@ -1,13 +1,17 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const DeleteEvent = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const hasConfirmed = useRef(false); 
 
   useEffect(() => {
     const deleteEvent = async () => {
+      if (hasConfirmed.current) return;
+      hasConfirmed.current = true;
+
       const confirmed = window.confirm(
         "Are you sure you want to delete this event?"
       );

@@ -4,7 +4,7 @@ require("dotenv").config();
 const SECRET_KEY = process.env.SECRET_KEY || "";
 
 const authMiddleware = (req, res, next) => {
-  let token = req.header("Authorization");
+  let token = req.header("Authorization"); // Authorization header se token lete hain
 
   if (!token) {
     return res.status(401).json({ error: "Access denied. No token provided." });
@@ -12,10 +12,9 @@ const authMiddleware = (req, res, next) => {
 
   try {
     token = token.replace("Bearer ", "").trim();
-
     const decoded = jwt.verify(token, SECRET_KEY);
 
-    req.user = decoded;
+    req.user = decoded; //  
     next();
   } catch (error) {
     console.error("Token verification error:", error.message);

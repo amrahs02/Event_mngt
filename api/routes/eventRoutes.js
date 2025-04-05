@@ -13,9 +13,7 @@ const {
   updateEvent,
 } = require("../controllers/eventController");
 
-// Event CRUD & RSVP
-router.get("/profile", authMiddleware, getProfile);
-router.get("/events", getAllEvents);
+// Event CRUD
 router.post(
   "/events",
   authMiddleware,
@@ -26,9 +24,16 @@ router.post(
   ],
   createEvent
 );
+router.get("/events", getAllEvents);
 router.get("/events/:id", authMiddleware, getEventById);
-router.put("/events/:id", authMiddleware, updateEvent);
+router.put("/events/:id", authMiddleware, updateEvent); 
 router.delete("/events/:id", authMiddleware, deleteEvent);
+
+
+// User profile
+router.get("/profile", authMiddleware, getProfile);
+// rsvp to event
+
 router.post("/events/:id/rsvp", rsvpToEvent);
 
 module.exports = router;

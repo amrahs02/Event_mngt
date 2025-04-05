@@ -37,7 +37,7 @@ const getEventById = async (req, res) => {
 // View all events (with pagination and search)
 const getAllEvents = async (req, res) => {
   try {
-    const { page = 1, limit = 10, search = "" } = req.query;
+    const { page = 1, limit = 10, search = "" } = req.query; 
     const offset = (parseInt(page) - 1) * parseInt(limit);
 
     const events = await Event.findAndCountAll({
@@ -72,7 +72,7 @@ const deleteEvent = async (req, res) => {
     const event = await Event.findByPk(req.params.id);
     if (!event) return res.status(404).json({ error: "Event not found" });
 
-    await event.destroy();
+    await event.destroy(); // 
     res.json({ message: "Event deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: "Server error" });
@@ -82,7 +82,7 @@ const deleteEvent = async (req, res) => {
 // Get profile info
 const getProfile = async (req, res) => {
   try {
-    const user = await User.findByPk(req.user.userId);
+    const user = await User.findByPk(req.user.userId); // findbypk find karta hai single record by its primary key
     if (!user) return res.status(404).json({ error: "User not found" });
 
     res.json({ email: user.email });
@@ -97,28 +97,28 @@ const rsvpToEvent = async (req, res) => {
     const { email } = req.body;
     if (!email) return res.status(400).json({ error: "Email is required" });
 
-    const event = await Event.findByPk(req.params.id);
+    const event = await Event.findByPk(req.params.id); // ek single record ko find karega 
     if (!event) return res.status(404).json({ error: "Event not found" });
 
     let attendees = event.attendees || [];
-    if (attendees.includes(email))
+    if (attendees.includes(email)) // agar email already attendees mein hai toh 
       return res.status(400).json({ error: "User already registered" });
 
-    attendees.push(email);
-    await event.update({ attendees });
+    attendees.push(email); // email ko attendees mein push karega ( database mein save karega ) 
+    await event.update({ attendees }); // event ko update karega 
 
     res.json({ message: "RSVP successful", event });
   } catch (error) {
     res.status(500).json({ error: "Server error" });
   }
 };
+
 module.exports = {
   createEvent,
   getEventById,
   getAllEvents,
   deleteEvent,
   updateEvent,
-
-  rsvpToEvent,
   getProfile,
+  rsvpToEvent,
 };
